@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h> 
 //Karol Tovar Mata
-//Marian
+//Marian Vega Torres
 
 #define T_CHAR 1
 #define T_INT 2
