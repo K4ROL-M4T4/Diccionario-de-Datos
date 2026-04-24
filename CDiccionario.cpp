@@ -1,7 +1,7 @@
 #include "CDiccionario.h"
 
-/* Inicializa los valores de una nueva entidad capturada por teclado */
-Entidad CDiccionario::capturaEntidad() {
+//Inicializa los valores de una nueva entidad capturada por teclado
+Entidad CDiccionario::capturaEntidad(){
     Entidad nueva;
     cout << "Ingrese el nombre de la entidad: ";
     cin >> nueva.nombre;
@@ -11,7 +11,7 @@ Entidad CDiccionario::capturaEntidad() {
     return nueva;
 }
 
-/* Coordina el proceso de capturar, verificar duplicados e insertar una entidad */
+//Coordina el proceso de capturar, verificar duplicados e insertar una entidad
 void CDiccionario::altaEntidad() {
     Entidad nueva = capturaEntidad();
     if (buscaEntidad(nueva.nombre) == -1) {
@@ -22,20 +22,20 @@ void CDiccionario::altaEntidad() {
     }
 }
 
-/* Lee el primer long del archivo que representa el inicio de la lista de entidades */
+//Lee el primer long del archivo que representa el inicio de la lista de entidades
 long CDiccionario::getCabeceraEntidades() {
     fseek(arch, 0, SEEK_SET);
     if (fread(&cab, sizeof(long), 1, arch) != 1) return -1;
     return cab;
 }
 
-/* Actualiza el puntero inicial del archivo */
+//Actualiza el puntero inicial del archivo
 void CDiccionario::escribeCabEntidades(long cabecera) {
     fseek(arch, 0, SEEK_SET);
     fwrite(&cabecera, sizeof(long), 1, arch);
 }
 
-/* Escribe una entidad al final del archivo y retorna su posición */
+//Escribe una entidad al final del archivo y retorna su posición
 long CDiccionario::escribeEntidad(Entidad ent) {
     fseek(arch, 0, SEEK_END);
     long direccion = ftell(arch);
@@ -43,13 +43,13 @@ long CDiccionario::escribeEntidad(Entidad ent) {
     return direccion;
 }
 
-/* Sobreescribe una entidad en una posición específica del archivo */
+//Sobreescribe una entidad en una posición específica del archivo
 void CDiccionario::reescribeEntidad(Entidad ent, long direccion) {
     fseek(arch, direccion, SEEK_SET);
     fwrite(&ent, sizeof(Entidad), 1, arch);
 }
 
-/* Recorre la lista ligada en el archivo buscando un nombre y retorna su dirección */
+//Recorre la lista ligada en el archivo buscando un nombre y retorna su dirección
 long CDiccionario::buscaEntidad(char nombre[30]) {
     long cabecera = getCabeceraEntidades();
     while (cabecera != -1) {
@@ -60,7 +60,7 @@ long CDiccionario::buscaEntidad(char nombre[30]) {
     return -1;
 }
 
-/* Recupera una estructura Entidad desde una dirección física del archivo */
+//Recupera una estructura Entidad desde una dirección física del archivo
 Entidad CDiccionario::leeEntidad(long direccion) {
     Entidad nvo;
     fseek(arch, direccion, SEEK_SET);
@@ -68,7 +68,7 @@ Entidad CDiccionario::leeEntidad(long direccion) {
     return nvo;
 }
 
-/* Inserta una entidad manteniendo el orden alfabético de la lista ligada */
+// Inserta una entidad manteniendo el orden alfabético de la lista ligada
 void CDiccionario::insertaEntidad(Entidad nvo, long dirNueva) {
     long cabecera = getCabeceraEntidades();
     if (cabecera == -1) {
@@ -97,7 +97,7 @@ void CDiccionario::insertaEntidad(Entidad nvo, long dirNueva) {
     }
 }
 
-/* Imprime en pantalla todas las entidades registradas recorriendo la lista */
+//Imprime en pantalla todas las entidades registradas recorriendo la lista
 void CDiccionario::consultaEntidades() {
     long aux = getCabeceraEntidades();
     cout << "\n--- LISTA DE ENTIDADES ---" << endl;
@@ -108,7 +108,7 @@ void CDiccionario::consultaEntidades() {
     }
 }
 
-/* Solicita el nombre de una entidad para proceder a su desconexión física */
+//Solicita el nombre de una entidad para proceder a su desconexión física
 void CDiccionario::bajaEntidad() {
     char nom[30];
     cout << "Ingrese el nombre de la entidad a eliminar: ";
@@ -121,11 +121,10 @@ void CDiccionario::bajaEntidad() {
     }
 }
 
-/* Lógica de desconexión de punteros para "eliminar" una entidad de la lista ligada */
+//desconexión de punteros para eliminar una entidad de la lista
 long CDiccionario::eliminaEntidad(char nombre[30]) {
     long actual = getCabeceraEntidades();
     long anterior = -1;
-    
     while (actual != -1) {
         Entidad ent = leeEntidad(actual);
         if (strcmp(ent.nombre, nombre) == 0) {
@@ -144,7 +143,7 @@ long CDiccionario::eliminaEntidad(char nombre[30]) {
     return -1;
 }
 
-/* Permite renombrar o actualizar una entidad eliminando la anterior e insertando la nueva */
+//Permite renombrar o actualizar una entidad eliminando la anterior e insertando la nueva
 void CDiccionario::modificaEntidad() {
     char nom[30];
     cout << "Ingrese el nombre de la entidad a modificar: ";
