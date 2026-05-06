@@ -164,3 +164,108 @@ void CDiccionario::modificaEntidad() {
         cout << "Error: La entidad no existe." << endl;
     }
 }
+
+//funciones en clase 
+void CDiccionario::modificaAtributo() {
+    char nombre[30];
+    Atributo nvo;
+    printf("Atributo a modificar: ");
+    scanf("%s", nombre);
+    
+    if (buscaAtributo(nombre) != -1) {
+        printf("Ingresa la nueva informacion: ");
+        nvo = capturaAtributo();
+        long dir = buscaAtributo(nvo.nombre); // Nota: Agregué 'long' asumiendo que no estaba declarada globalmente
+        
+        if (strcmp(nvo.nombre, nombre) == 0 || dir == -1) {
+            long dir3 = eliminaAtributo(nombre); // Asumo que dir3 es long
+            insertaAtributo(nvo, dir3);
+        }
+        else
+            printf("No se puede modificar porque ya existe uno con ese nombre");
+    }
+    else
+        printf("No existe el atributo");
+}
+
+void CDiccionario::bajaAtributo() {
+    char nombre[50];
+    printf("Ingrese el nombre del atributo a eliminar: ");
+    scanf("%s", nombre);
+    long dir = buscaAtributo(nombre);
+    
+    if(dir == -1)
+        printf("Error: el atributo no existe");
+    else
+        eliminaAtributo(nombre);
+}
+
+void CDiccionario::EliminaAtributo(char cad[]) {
+    long cab = activa.atr;
+    long dirant = -1;
+    Atributo ant, actual;
+    
+    actual = leeAtributo(cab);
+    if(strcmp(actual.nombre, cad) == 0)
+        reescribeEntidad(activa, directiva); // En tus apuntes dice "directiva", probablemente sea "dirActiva"
+    else
+        while (cab != -1 && strcmp(cad, actual.nombre) < 0) {
+            dirant = cab;
+            ant = actual;
+            cab = actual.sig;
+            if (cab != -1)
+                //...
+
+void CDiccionario::insertaAtributo(Atributo nvo, long dir) {
+    if(activa.atr == -1) {
+        activa.atr = dir;
+        reescribeEntidad(activa, directiva); 
+    }
+    
+    Atributo actual = leeAtributo(activa.atr);
+    if(strcmp(actual.nombre, nvo.nombre) > 0) {
+        nvo.sig = activa.atr;
+        reescribeAtributo(nvo, dir);
+        activa.atr = dir;
+        reescribeEntidad(activa, directiva);
+    } else {
+        long cab = activa.atr;
+        while(cab != -1 && strcmp(nvo.nombre, actual.nombre) > 0) {
+            long dirAnt = cab;
+            Atributo atrAnt = actual;
+            cab = actual.sig;
+            if(cab != -1)
+                actual = leeAtributo(cab);
+        } 
+        
+        if (cab != -1) {
+            nvo.sig = cab;
+            reescribeAtributo(nvo, dir);
+        }
+        atrAnt.sig = dir;
+        reescribeAtributo(atrAnt, dirAnt);
+    }
+}
+
+void CDiccionario::modificaEntidad() {
+    Entidad nueva;
+    char nombre[50]; 
+    
+    cout << "¿Que entidad desea modificar? ";
+    cin >> nombre;
+
+    if (buscaEntidad(nombre) != -1) {
+        cout << "Ingrese la nueva info: ";
+        nueva = capturaEntidad();
+        
+        if (buscaEntidad(nueva.nombre) == -1) {
+            long arr = eliminaEntidad(nombre); 
+            reescribeEntidad(nueva, arr);    
+            insertaEntidad(nueva, arr);        
+        } else {
+            cout << "No se puede";
+        }
+    } else {
+        cout << "No existe la entidad";
+    }
+}
