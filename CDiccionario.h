@@ -35,14 +35,12 @@ private:
     long diractiva;
     long tambloque;
     int nAtributos;
-
     char nombreArchivo[50];
 
 public:
     CDiccionario();
 
     void menuPrincipal();
-
     void nuevoDiccionario();
     void abrirDiccionario();
     void MenuEntidades();
@@ -51,11 +49,11 @@ public:
     void consultarEntidades();
     void bajaEntidad();
     void modificaEntidad();
-
     long getCabEntidades();
     void escribeCabEntidades(long cab);
     Entidad capturaEntidad();
     long buscaEntidad(Entidad ent);
+    long buscaEntidad(cadena nom);
     Entidad leeEntidad(long dir);
     long escribeEntidad(Entidad ent);
     void reescribeEntidad(long dir, Entidad ent);
@@ -63,14 +61,22 @@ public:
     long eliminaEntidad(cadena nom);
 
     void menuAtributos();
-
+    long pideEntidad();
+    void altaAtributo();
     void nuevoAtributo();
     void consultarAtributo();
     void eliminaAtributo();
+    long eliminaAtributo(cadena nom);
     void modificaAtributo();
+    Atributo capturaAtributo();
+    long buscaAtributo(cadena nom);
+    Atributo leeAtributo(long dir);
+    long escribeAtributo(Atributo atr);
+    void reescribeAtributo(long dir, Atributo atr);
+    void insertaAtributo(Atributo nvo, long dir);
+    void bajaAtributo();
 
     void menuDatos();
-
     void nuevoRegistro();
     void consultarRegistro();
     void eliminaRegistro();

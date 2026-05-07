@@ -1,10 +1,11 @@
 #include "CDiccionario.h"
 //Marian, revisa esto o me mato
 //Por esta que ya no voy a faltar
+
 CDiccionario::CDiccionario(){
-	archivo = NULL;
-	nAtributos = 0;
-	tambloque = 0;
+    archivo = NULL;
+    nAtributos = 0;
+    tambloque = 0;
 }
 
 void CDiccionario::menuPrincipal(){
@@ -67,8 +68,6 @@ void CDiccionario::abrirDiccionario(){
     }
 }
 
-
-
 void CDiccionario::MenuEntidades(){
     int op;
     do{
@@ -79,7 +78,7 @@ void CDiccionario::MenuEntidades(){
             case 2: consultarEntidades(); break;
             case 3: bajaEntidad(); break;
             case 4: modificaEntidad(); break;
-            case 5: menuAtributos();
+            case 5: 
                 //Antes de entrar a menuAtributos se debe ejecutar pideEntidad
                 if (pideEntidad() != -1){
                     menuAtributos(); 
@@ -101,9 +100,9 @@ void CDiccionario::menuAtributos(){
         scanf("%d", &op);
         switch(op)
         {
-            case 1: nuevoAtributo(); break;
+            case 1: altaAtributo(); break;
             case 2: consultarAtributo(); break;
-            case 3: eliminaAtributo(); break;
+            case 3: bajaAtributo(); break;
             case 4: modificaAtributo(); break;
             case 5: printf("\nRegresando..."); break;
             default: printf("\nOpcion no valida");
@@ -132,18 +131,18 @@ void CDiccionario::menuDatos()
 }
 
 void CDiccionario::escribeCabEntidades(long cab){
-	fseek(archivo, 0, SEEK_SET);
-	fwrite(&cab, sizeof(long), 1, archivo);
+    fseek(archivo, 0, SEEK_SET);
+    fwrite(&cab, sizeof(long), 1, archivo);
 }
 
 void CDiccionario::altaEntidad(){
-	long dir;
-	Entidad nueva = capturaEntidad();
-	if(buscaEntidad(nueva) == -1){
-		dir = escribeEntidad(nueva);
-		insertaEntidad(nueva, dir);
-	} else
-		printf("Error: La entidad ya existe");
+    long dir;
+    Entidad nueva = capturaEntidad();
+    if(buscaEntidad(nueva) == -1){
+        dir = escribeEntidad(nueva);
+        insertaEntidad(nueva, dir);
+    } else
+        printf("Error: La entidad ya existe");
 }
 
 Entidad CDiccionario::capturaEntidad()
@@ -158,63 +157,63 @@ Entidad CDiccionario::capturaEntidad()
 }
 
 long CDiccionario::buscaEntidad(Entidad ent){
-	long cab = getCabEntidades();
-	Entidad actual;
-	while(cab != -1){
-		actual = leeEntidad(cab);
-		if(strcmp(actual.nombre, ent.nombre) == 0)
-			return cab;
-		cab = actual.sig;
-	}
-	return -1;
+    long cab = getCabEntidades();
+    Entidad actual;
+    while(cab != -1){
+        actual = leeEntidad(cab);
+        if(strcmp(actual.nombre, ent.nombre) == 0)
+            return cab;
+        cab = actual.sig;
+    }
+    return -1;
 }
 
 long CDiccionario::escribeEntidad(Entidad ent){
-	long dir;
+    long dir;
 
-	fseek(archivo, 0, SEEK_END);
-	dir = ftell(archivo);
-	fwrite(&ent, sizeof(Entidad), 1, archivo);
+    fseek(archivo, 0, SEEK_END);
+    dir = ftell(archivo);
+    fwrite(&ent, sizeof(Entidad), 1, archivo);
 
-	return dir;
+    return dir;
 }
 
 Entidad CDiccionario::leeEntidad(long dir)
 {
-	Entidad nvo;
-	fseek(archivo, dir, SEEK_SET);
-	fread(&nvo, sizeof(Entidad), 1, archivo);
-	return nvo;
+    Entidad nvo;
+    fseek(archivo, dir, SEEK_SET);
+    fread(&nvo, sizeof(Entidad), 1, archivo);
+    return nvo;
 }
 
 void CDiccionario::insertaEntidad(Entidad nvo, long dir)
 {
-	Entidad act, ant;
-	long cab = getCabEntidades(), dirant;
-	if(cab == -1){
-		cab = dir;
-		escribeCabEntidades(cab);
-	}else{
-		act = leeEntidad(cab);
-		if(strcmp(act.nombre, nvo.nombre) > 0){
-			nvo.sig = cab;
-			reescribeEntidad(dir, nvo);
-			escribeCabEntidades(dir);
-		}else
-		{
-			while(cab != -1 && strcmp(nvo.nombre, act.nombre) > 0){
-				dirant = cab;
-				ant = act;
-				cab = act.sig;
-				if(cab != -1)
-					act = leeEntidad(cab);
-			}
-			nvo.sig = cab;
-			reescribeEntidad(dir, nvo);
-			ant.sig = dir;
-			reescribeEntidad(dirant, ant);
-		}
-	}
+    Entidad act, ant;
+    long cab = getCabEntidades(), dirant;
+    if(cab == -1){
+        cab = dir;
+        escribeCabEntidades(cab);
+    }else{
+        act = leeEntidad(cab);
+        if(strcmp(act.nombre, nvo.nombre) > 0){
+            nvo.sig = cab;
+            reescribeEntidad(dir, nvo);
+            escribeCabEntidades(dir);
+        }else
+        {
+            while(cab != -1 && strcmp(nvo.nombre, act.nombre) > 0){
+                dirant = cab;
+                ant = act;
+                cab = act.sig;
+                if(cab != -1)
+                    act = leeEntidad(cab);
+            }
+            nvo.sig = cab;
+            reescribeEntidad(dir, nvo);
+            ant.sig = dir;
+            reescribeEntidad(dirant, ant);
+        }
+    }
 }
 
 void CDiccionario::reescribeEntidad(long dir, Entidad ent){
@@ -224,65 +223,65 @@ void CDiccionario::reescribeEntidad(long dir, Entidad ent){
 
 void CDiccionario::bajaEntidad()
 {
-	long dir;
-	char nom[30];
-	printf("Ingrese nombre: ");
-	scanf("%s", nom);
-	Entidad aux;
-	strcpy(aux.nombre, nom);
-	dir = buscaEntidad(aux);
-	if(dir == -1)
-		printf("Error");
-	else
-		eliminaEntidad(nom);
+    long dir;
+    char nom[30];
+    printf("Ingrese nombre: ");
+    scanf("%s", nom);
+    Entidad aux;
+    strcpy(aux.nombre, nom);
+    dir = buscaEntidad(aux);
+    if(dir == -1)
+        printf("Error");
+    else
+        eliminaEntidad(nom);
 }
 
 long CDiccionario::eliminaEntidad(cadena nom)
 {
-	Entidad ant, le;
-	long dirant, cab;
-	cab = getCabEntidades();
-	le = leeEntidad(cab);
-	if(strcmp(nom, le.nombre) == 0)
-	{
-		escribeCabEntidades(le.sig);
-		return cab;
-	}
-	else{
-		while(cab != -1 && strcmp(nom, le.nombre) != 0){
-			dirant = cab;
-			ant = le;
-			cab = le.sig;
-			if(cab != -1)
-				le = leeEntidad(cab);
-		}
-		if(strcmp(le.nombre, nom) == 0)
-		{
-			ant.sig = le.sig;
-			reescribeEntidad(dirant, ant);
-			return cab;
-		}
-		else
-			return -1;
-	}
+    Entidad ant, le;
+    long dirant, cab;
+    cab = getCabEntidades();
+    le = leeEntidad(cab);
+    if(strcmp(nom, le.nombre) == 0)
+    {
+        escribeCabEntidades(le.sig);
+        return cab;
+    }
+    else{
+        while(cab != -1 && strcmp(nom, le.nombre) != 0){
+            dirant = cab;
+            ant = le;
+            cab = le.sig;
+            if(cab != -1)
+                le = leeEntidad(cab);
+        }
+        if(strcmp(le.nombre, nom) == 0)
+        {
+            ant.sig = le.sig;
+            reescribeEntidad(dirant, ant);
+            return cab;
+        }
+        else
+            return -1;
+    }
 }
 
 void CDiccionario::modificaEntidad(){
-	Entidad nueva, aux;
-	long dir;
-	printf("¿Que entidad desea modificar? ");
-	scanf(" %[^\n]",aux.nombre);
-	if(buscaEntidad(aux) != -1){
-		printf("Ingrese la nueva info: ");
-		nueva = capturaEntidad();
-		if(buscaEntidad(nueva) == -1){
-			dir = eliminaEntidad(aux.nombre);
-			reescribeEntidad(dir, nueva);
-			insertaEntidad(nueva, dir);
-		} else
-			printf("No se puede actualizar.");
-	} else
-		printf("No existe la entidad.");
+    Entidad nueva, aux;
+    long dir;
+    printf("¿Que entidad desea modificar? ");
+    scanf(" %[^\n]",aux.nombre);
+    if(buscaEntidad(aux) != -1){
+        printf("Ingrese la nueva info: ");
+        nueva = capturaEntidad();
+        if(buscaEntidad(nueva) == -1){
+            dir = eliminaEntidad(aux.nombre);
+            reescribeEntidad(dir, nueva);
+            insertaEntidad(nueva, dir);
+        } else
+            printf("No se puede actualizar.");
+    } else
+        printf("No existe la entidad.");
 }
 
 //REGISTROS
@@ -349,10 +348,10 @@ void CDiccionario::consultarRegistro(){
 
 long CDiccionario::getCabEntidades()
 {
-	long dir;
-	fseek(archivo, 0, SEEK_SET);
-	fread(&dir, sizeof(long), 1, archivo);
-	return dir;
+    long dir;
+    fseek(archivo, 0, SEEK_SET);
+    fread(&dir, sizeof(long), 1, archivo);
+    return dir;
 }
 
 void CDiccionario::consultarEntidades()
@@ -391,13 +390,12 @@ long CDiccionario::eliminaAtributo(cadena cad){
     if (cab == -1) return -1; 
     
     actual = leeAtributo(cab);
-    if(strcmp(actual.nombre, cad) == 0) {
+    if(strcmp(actual.nombre, cad) == 0){
         activa.atr = actual.sig;
-        reescribeEntidad(activa, diractiva);
+        reescribeEntidad(diractiva, activa);
         return cab;
     } 
     else {
-       
         while (cab != -1 && strcmp(cad, actual.nombre) != 0) {
             dirant = cab;
             ant = actual;
@@ -409,7 +407,7 @@ long CDiccionario::eliminaAtributo(cadena cad){
         
         if (cab != -1) {
             ant.sig = actual.sig; 
-            reescribeAtributo(ant, dirant);
+            reescribeAtributo(dirant, ant);
             return cab;
         }
     }
@@ -419,18 +417,17 @@ long CDiccionario::eliminaAtributo(cadena cad){
 void CDiccionario::insertaAtributo(Atributo nvo, long dir) {
     if(activa.atr == -1) {
         activa.atr = dir;
-        reescribeEntidad(activa, diractiva);
+        reescribeEntidad(diractiva, activa);
         return; 
     }
     
     Atributo actual = leeAtributo(activa.atr);
     if(strcmp(actual.nombre, nvo.nombre) > 0) {
         nvo.sig = activa.atr;
-        reescribeAtributo(nvo, dir);
+        reescribeAtributo(dir, nvo); 
         activa.atr = dir;
-        reescribeEntidad(activa, diractiva);
-    } 
-    else {
+        reescribeEntidad(diractiva, activa);
+    } else{
         long cab = activa.atr;
         long dirAnt = -1;
         Atributo atrAnt;
@@ -444,10 +441,10 @@ void CDiccionario::insertaAtributo(Atributo nvo, long dir) {
         }
         if(cab != -1) {
             nvo.sig = cab;
-            reescribeAtributo(nvo, dir);
+            reescribeAtributo(dir, nvo); 
         }
         atrAnt.sig = dir;
-        reescribeAtributo(atrAnt, dirAnt);
+        reescribeAtributo(dirAnt, atrAnt);
     }
 }
 
@@ -455,7 +452,9 @@ long CDiccionario::pideEntidad() {
     cadena nom;
     printf("\nIngrese el nombre de la Entidad para gestionar sus Atributos: ");
     scanf(" %[^\n]", nom); 
-    long dir = buscaEntidad(nom);
+    Entidad aux;
+    strcpy(aux.nombre, nom);
+    long dir = buscaEntidad(aux);
 
     if (dir != -1) {
         fseek(archivo, dir, SEEK_SET);
@@ -472,7 +471,7 @@ long CDiccionario::pideEntidad() {
     }
 }
 
-Atributo CDiccionario:: CapturaAtributo(){
+Atributo CDiccionario::capturaAtributo(){ 
     Atributo nuevoA;
     cout << "Ingrese el nombre del atributo: ";
     cin >> nuevoA.nombre;
@@ -483,18 +482,10 @@ Atributo CDiccionario:: CapturaAtributo(){
         cin >> nuevoA.tamano;
     }else{
         switch (nuevoA.tipo) {
-            case 2:
-                nuevoA.tamano = sizeof(int);
-                break;
-            case 3:
-                nuevoA.tamano = sizeof(float);
-                break;
-            case 4:
-                nuevoA.tamano = sizeof(double);
-                break;
-            case 5:
-                nuevoA.tamano = sizeof(long);
-                break;
+            case 2: nuevoA.tamano = sizeof(int); break;
+            case 3: nuevoA.tamano = sizeof(float); break;
+            case 4: nuevoA.tamano = sizeof(double); break;
+            case 5: nuevoA.tamano = sizeof(long); break;
             default:
                 cout << "Tipo no valido. Asignando tamano por defecto de 0." << endl;
                 nuevoA.tamano = 0;
@@ -504,24 +495,24 @@ Atributo CDiccionario:: CapturaAtributo(){
     cin >> nuevoA.iskp;
     cout << "Permite nulo? (s/n): ";
     cin >> nuevoA.nulo;
+    
+    cin.ignore(); 
+    
     cout << "Ingrese una descripción para el atributo: ";
     cin.getline(nuevoA.descripcion, 30);
+    nuevoA.sig = -1;
     return nuevoA;
 }
 
 void CDiccionario::altaAtributo(){
-    Atributo nuevoA = CapturaAtr();
-    if (buscaAtributo(nuevoA) != -1) {
-        dir = escribeAtributo(nuevoA);
+    Atributo nuevoA = capturaAtributo(); 
+    if (buscaAtributo(nuevoA.nombre) == -1) {
+        long dir = escribeAtributo(nuevoA);
         insertaAtributo(nuevoA, dir);
+        cout << "Atributo guardado exitosamente." << endl;
     }else {
-        cout << "El atributo no existe" << endl;
+        cout << "El atributo ya existe" << endl;
     }
-}
-
-void CDiccionario::nuevoAtributo()
-{
-   printf("\nNuevo atributo...");
 }
 
 void CDiccionario::consultarAtributo()
@@ -529,25 +520,19 @@ void CDiccionario::consultarAtributo()
   printf("\nConsultar atributo...");
 }
 
-void CDiccionario::eliminaAtributo()
-{
-   printf("\nEliminar atributo...");
-}
-
-void CDiccionario::modificaAtributo()
-{
+void CDiccionario::modificaAtributo(){
     cadena nombre;
     Atributo nvo;
     printf("\nAtributo a modificar: ");
     scanf("%s", nombre); 
     if (buscaAtributo(nombre) != -1){
         printf("Ingresa la nueva informacion:\n");
-        nvo= capturaAtributo();
+        nvo = capturaAtributo(); // CORREGIDO: 'c' minúscula
 
         long dir2 = buscaAtributo(nvo.nombre);
         if (strcmp(nvo.nombre, nombre) == 0 || dir2 == -1) {
             long dir3 = eliminaAtributo(nombre);
-            reescribeAtributo(nvo, dir3);
+            reescribeAtributo(dir3, nvo); // CORREGIDO: Parámetros invertidos
             insertaAtributo(nvo, dir3);
             printf("Atributo modificado exitosamente.\n");
         }else {
@@ -556,6 +541,35 @@ void CDiccionario::modificaAtributo()
     } else {
         printf("No existe el atributo.\n");
     }
+}
+
+long CDiccionario::escribeAtributo(Atributo atr){
+    fseek(archivo, 0, SEEK_END);
+    long dir = ftell(archivo);
+    fwrite(&atr, sizeof(Atributo), 1, archivo);
+    return dir;
+}
+
+Atributo CDiccionario::leeAtributo(long dir){
+    Atributo atr;
+    fseek(archivo, dir, SEEK_SET);
+    fread(&atr, sizeof(Atributo), 1, archivo);
+    return atr;
+}
+
+void CDiccionario::reescribeAtributo(long dir, Atributo atr){ 
+    fseek(archivo, dir, SEEK_SET);
+    fwrite(&atr, sizeof(Atributo), 1, archivo);
+}
+
+long CDiccionario::buscaAtributo(cadena nom){
+    long cab = activa.atr;
+    while(cab != -1){
+        Atributo act = leeAtributo(cab);
+        if(strcmp(act.nombre, nom) == 0) return cab;
+        cab = act.sig;
+    }
+    return -1;
 }
 
 void CDiccionario::eliminaRegistro()
