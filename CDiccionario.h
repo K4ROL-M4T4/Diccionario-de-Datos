@@ -1,17 +1,31 @@
+#ifndef CDICCIONARIO_H
+#define CDICCIONARIO_H
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+using namespace std;
+
 #define TAM 50
 typedef char cadena [30];
 
-typedef struct
-{
+typedef struct{
     long atr;
     long sig;
     cadena nombre;
     long data;
 }Entidad;
+
+typedef struct Atributo {
+    char nombre[30];
+    unsigned int tipo;
+    unsigned int tamano;
+    char iskp;
+    long sig;
+    char descripcion[30];
+    char nulo;
+}Atributo;
 
 class CDiccionario
 {
@@ -62,3 +76,4 @@ public:
     void eliminaRegistro();
     void modificaRegistro();
 };
+#endif
