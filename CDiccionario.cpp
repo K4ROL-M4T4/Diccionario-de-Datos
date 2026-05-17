@@ -1,6 +1,6 @@
 #include "CDiccionario.h"
 
-// Descripción: Constructor de la clase. Inicializa los punteros y variables, y lanza el menú principal.
+//Constructor de la clase. Inicializa los punteros y variables, y lanza el menú principal.
 CDiccionario::CDiccionario(){
     archivo = NULL;
     nAtributos = 0;
@@ -8,13 +8,13 @@ CDiccionario::CDiccionario(){
     menuPrincipal();
 }
 
-// Descripción: Muestra las opciones principales para crear, abrir o salir del sistema de diccionarios.
+//Muestra las opciones principales para crear, abrir o salir del sistema de diccionarios.
 void CDiccionario::menuPrincipal(){
     int op;
     do{
-        printf("\n========================================\n");
-        printf("           MENU PRINCIPAL\n");
-        printf("========================================\n");
+        printf("\n\n");
+        printf("MENU PRINCIPAL\n");
+        printf("\n");
         printf("1. Nuevo diccionario\n");
         printf("2. Abrir diccionario\n");
         printf("3. Salir\n");
@@ -29,7 +29,7 @@ void CDiccionario::menuPrincipal(){
     }while(op != 3);
 }
 
-// Descripción: Pide el nombre de un archivo nuevo. Si no existe, lo crea y le inserta la cabecera nula (-1).
+// Pide el nombre de un archivo nuevo. Si no existe, lo crea y le inserta la cabecera nula (-1).
 void CDiccionario::nuevoDiccionario(){
     char nombre[50];
     printf("\nNombre del nuevo diccionario: ");
@@ -52,7 +52,7 @@ void CDiccionario::nuevoDiccionario(){
     }
 }
 
-// Descripción: Abre un archivo binario existente en modo lectura/escritura y despliega el menú de entidades.
+//   Abre un archivo binario existente en modo lectura/escritura y despliega el menú de entidades.
 void CDiccionario::abrirDiccionario(){
     char nombre[50];
     printf("\nNombre del archivo a abrir: ");
@@ -67,13 +67,13 @@ void CDiccionario::abrirDiccionario(){
     }
 }
 
-// Descripción: Menú secundario para la gestión integral de entidades (tablas).
+//  Menú secundario para la gestión integral de entidades (tablas).
 void CDiccionario::MenuEntidades(){
     int op;
     do{
-        printf("\n========================================\n");
-        printf("           MENU DE ENTIDADES\n");
-        printf("========================================\n");
+        printf("\n\n");
+        printf("MENU DE ENTIDADES:\n");
+        printf("\n");
         printf("1. Nueva Entidad\n");
         printf("2. Consultar Entidades\n");
         printf("3. Eliminar Entidad\n");
@@ -96,17 +96,16 @@ void CDiccionario::MenuEntidades(){
     }while(op != 7);
 }
 
-// ---------------- ATRIBUTOS ----------------
-
-// Descripción: Menú para administrar los atributos de la entidad seleccionada.
+//ATRIBUTOS
+//   Menú para administrar los atributos de la entidad seleccionada.
 void CDiccionario::menuAtributos(){
     if(!pideEntidad()) return;
 
     int op;
     do{
-        printf("\n========================================\n");
+        printf("\n\n");
         printf("     ATRIBUTOS DE LA ENTIDAD: %s\n", activa.nombre);
-        printf("========================================\n");
+        printf("\n");
         printf("1. Nuevo Atributo\n");
         printf("2. Consultar Atributos\n");
         printf("3. Eliminar Atributo\n");
@@ -125,9 +124,8 @@ void CDiccionario::menuAtributos(){
     }while(op != 5);
 }
 
-// ---------------- BLOQUES ----------------
-
-// Descripción: Menú para la administración e ingreso de registros (bloques) en una entidad.
+//BLOQUES
+//  Menú para la administración e ingreso de registros (bloques) en una entidad.
 void CDiccionario::menuBloques(){
     if(!pideEntidad()){
         return;
@@ -138,9 +136,9 @@ void CDiccionario::menuBloques(){
 
     int op;
     do{
-        printf("\n========================================\n");
+        printf("\n\n");
         printf("      BLOQUES DE LA ENTIDAD: %s\n", activa.nombre);
-        printf("========================================\n");
+        printf("\n");
         printf("1. Nuevo Bloque (Registro)\n");
         printf("2. Consultar Todos los Bloques\n");
         printf("3. Eliminar Bloque \n");//En proceso
@@ -159,13 +157,13 @@ void CDiccionario::menuBloques(){
     }while(op != 5);
 }
 
-// Descripción: Escribe la cabecera principal de las entidades al inicio del archivo (byte 0).
+//   Escribe la cabecera principal de las entidades al inicio del archivo (byte 0).
 void CDiccionario::escribeCabEntidades(long cab){
     fseek(archivo, 0, SEEK_SET);
     fwrite(&cab, sizeof(long), 1, archivo);
 }
 
-// Descripción: Orquesta la captura, escritura en archivo e inserción en la lista ligada de una nueva entidad.
+//   Orquesta la captura, escritura en archivo e inserción en la lista ligada de una nueva entidad.
 void CDiccionario::altaEntidad(){
     long dir;
     Entidad nueva = capturaEntidad();
@@ -179,7 +177,7 @@ void CDiccionario::altaEntidad(){
     }
 }
 
-// Descripción: Solicita el nombre de una nueva entidad y formatea sus apuntadores por defecto en -1.
+// Solicita el nombre de una nueva entidad y formatea sus apuntadores por defecto en -1.
 Entidad CDiccionario::capturaEntidad(){
     Entidad ent;
     printf("\nNombre de la nueva entidad: ");
@@ -190,7 +188,7 @@ Entidad CDiccionario::capturaEntidad(){
     return ent;
 }
 
-// Descripción: Recorre la lista ligada de entidades buscando coincidencias por nombre. Regresa su dirección.
+// Recorre la lista ligada de entidades buscando coincidencias por nombre. Regresa su dirección.
 long CDiccionario::buscaEntidad(Entidad ent){
     long cab = getCabEntidades();
     Entidad actual;
@@ -204,7 +202,7 @@ long CDiccionario::buscaEntidad(Entidad ent){
     return -1;
 }
 
-// Descripción: Añade la estructura de una entidad al final del archivo binario y retorna el offset donde cayó.
+// Añade la estructura de una entidad al final del archivo binario y retorna el offset donde cayó.
 long CDiccionario::escribeEntidad(Entidad ent){
     long dir;
     fseek(archivo, 0, SEEK_END);
@@ -213,7 +211,7 @@ long CDiccionario::escribeEntidad(Entidad ent){
     return dir;
 }
 
-// Descripción: Lee una estructura Entidad desde una posición física específica del archivo.
+//   Lee una estructura Entidad desde una posición física específica del archivo.
 Entidad CDiccionario::leeEntidad(long dir){
     Entidad nvo;
     fseek(archivo, dir, SEEK_SET);
@@ -221,7 +219,7 @@ Entidad CDiccionario::leeEntidad(long dir){
     return nvo;
 }
 
-// Descripción: Conecta la nueva entidad en la lista ligada en disco, manteniéndola en orden alfabético.
+//   Conecta la nueva entidad en la lista ligada en disco, manteniéndola en orden alfabético.
 void CDiccionario::insertaEntidad(Entidad nvo, long dir){
     Entidad act, ant;
     long cab = getCabEntidades(), dirant;
@@ -250,13 +248,13 @@ void CDiccionario::insertaEntidad(Entidad nvo, long dir){
     }
 }
 
-// Descripción: Sobrescribe la estructura de una entidad ya existente en una posición específica del disco.
+//Sobrescribe la estructura de una entidad ya existente en una posición específica del disco.
 void CDiccionario::reescribeEntidad(long dir, Entidad ent){
     fseek(archivo, dir, SEEK_SET);
     fwrite(&ent, sizeof(Entidad), 1, archivo);
 }
 
-// Descripción: Interfaz para pedir el nombre de la entidad a eliminar e invocar el proceso lógico.
+//Interfaz para pedir el nombre de la entidad a eliminar e invocar el proceso lógico.
 void CDiccionario::bajaEntidad(){
     long dir;
     char nom[30];
@@ -276,7 +274,7 @@ void CDiccionario::bajaEntidad(){
     }
 }
 
-// Descripción: Desenlaza una entidad de la lista ligada haciendo que el nodo anterior apunte al siguiente.
+//   Desenlaza una entidad de la lista ligada haciendo que el nodo anterior apunte al siguiente.
 long CDiccionario::eliminaEntidad(cadena nom){
     Entidad ant, le;
     long dirant, cab;
@@ -302,7 +300,7 @@ long CDiccionario::eliminaEntidad(cadena nom){
     }
 }
 
-// Descripción: Elimina logicamente la entidad anterior y reinserta una nueva versión con los datos actualizados.
+// Elimina logicamente la entidad anterior y reinserta una nueva versión con los datos actualizados.
 void CDiccionario::modificaEntidad(){
     Entidad nueva, aux;
     long dir;
@@ -326,7 +324,7 @@ void CDiccionario::modificaEntidad(){
     }
 }
 
-// Descripción: Lee y retorna la posición del archivo apuntada en el bloque 0 (cabecera global de entidades).
+//   Lee y retorna la posición del archivo apuntada en el bloque 0 (cabecera global de entidades).
 long CDiccionario::getCabEntidades(){
     long dir;
     fseek(archivo, 0, SEEK_SET);
@@ -334,13 +332,13 @@ long CDiccionario::getCabEntidades(){
     return dir;
 }
 
-// Descripción: Extrae y lista las entidades.
+//   Extrae y lista las entidades.
 void CDiccionario::consultarEntidades(){
     Entidad actual;
     long cab = getCabEntidades();
     int contador = 1;
 
-    printf("\n\t=== LISTA DE ENTIDADES ===\n");
+    printf("\n\tLISTA DE ENTIDADES:\n");
     if(cab == -1){
         printf("\nNo hay entidades registradas en el sistema.\n");
         return;
@@ -348,20 +346,15 @@ void CDiccionario::consultarEntidades(){
 
     while(cab != -1){
         actual = leeEntidad(cab);
-        printf("\n----------------------------------------\n");
+        printf("\n\n");
         printf(" ENTIDAD #%d: %s\n", contador, actual.nombre);
-        printf("----------------------------------------\n");
+        printf("\n");
         printf(" Dir. Atributos: %ld | Dir. Datos: %ld | Dir. Siguiente: %ld\n", actual.atr, actual.data, actual.sig);
-
         cab = actual.sig;
         contador++;
     }
   }
 
-
-// ====================== FUNCIONES NUEVAS DE ATRIBUTOS ====================== //
-
-// Descripción: Interfaz requerida para elegir sobre qué entidad se trabajarán los atributos y bloques.
 bool CDiccionario::pideEntidad(){
     if(getCabEntidades() == -1){
         printf("\nError: No hay entidades registradas en el sistema.\n");
@@ -382,7 +375,7 @@ bool CDiccionario::pideEntidad(){
     return false;
 }
 
-// Descripción: Descarga a memoria RAM la estructura Atributo desde la ubicación física dada.
+//Descarga a memoria RAM la estructura Atributo desde la ubicación física dada.
 Atributo CDiccionario::leeAtributo(long dir){
     Atributo nvo;
     fseek(archivo, dir, SEEK_SET);
@@ -390,7 +383,7 @@ Atributo CDiccionario::leeAtributo(long dir){
     return nvo;
 }
 
-// Descripción: Plasma los bytes de un atributo nuevo al final del documento binario.
+//Plasma los bytes de un atributo nuevo al final del documento binario.
 long CDiccionario::escribeAtributo(Atributo atr){
     long dir;
     fseek(archivo, 0, SEEK_END);
@@ -399,13 +392,13 @@ long CDiccionario::escribeAtributo(Atributo atr){
     return dir;
 }
 
-// Descripción: Sustituye en disco un atributo existente por una versión actualizada en el mismo byte.
+// Sustituye en disco un atributo existente por una versión actualizada en el mismo byte.
 void CDiccionario::reescribeAtributo(long dir, Atributo atr){
     fseek(archivo, dir, SEEK_SET);
     fwrite(&atr, sizeof(Atributo), 1, archivo);
 }
 
-// Descripción: Pide y procesa interactivamente los tipos de datos, tamaños y restricciones para crear una columna.
+//   Pide y procesa interactivamente los tipos de datos, tamaños y restricciones para crear una columna.
 Atributo CDiccionario::capturaAtributo(){
     Atributo nuevaA;
     printf("\nNombre del atributo: ");
@@ -445,7 +438,7 @@ Atributo CDiccionario::capturaAtributo(){
     return nuevaA;
 }
 
-// Descripción: Gestiona el alta de un atributo validando primero que no esté duplicado en la entidad activa.
+//Gestiona el alta de un atributo validando primero que no esté duplicado en la entidad activa.
 void CDiccionario::nuevoAtributo(){
     Atributo nuevoA = capturaAtributo();
     if(buscaAtributo(nuevoA.nombre) == -1){
@@ -457,7 +450,7 @@ void CDiccionario::nuevoAtributo(){
     }
 }
 
-// Descripción: Acomoda y enlaza un atributo a la sublista de la entidad activa ordenando alfabéticamente.
+//   Acomoda y enlaza un atributo a la sublista de la entidad activa ordenando alfabéticamente.
 void CDiccionario::insertaAtributo(Atributo nvo, long dir){
     if(activa.atr == -1){
         activa.atr = dir;
@@ -489,7 +482,7 @@ void CDiccionario::insertaAtributo(Atributo nvo, long dir){
     }
 }
 
-// Descripción: Recorre y evalúa la lista ligada de atributos hasta encontrar uno que coincida por nombre.
+//   Recorre y evalúa la lista ligada de atributos hasta encontrar uno que coincida por nombre.
 long CDiccionario::buscaAtributo(char *atr){
     long cab = activa.atr;
     Atributo actual;
@@ -503,7 +496,7 @@ long CDiccionario::buscaAtributo(char *atr){
     return -1;
 }
 
-// Descripción: Imprime el esquema de columnas de la entidad activa.
+//   Imprime el esquema de columnas de la entidad activa.
 void CDiccionario::consultarAtributo(){
     Atributo nvo;
     long cab = activa.atr;
@@ -529,7 +522,7 @@ void CDiccionario::consultarAtributo(){
     }
 }
 
-// Descripción: Controla la búsqueda y ejecución de la baja de un atributo por nombre.
+//   Controla la búsqueda y ejecución de la baja de un atributo por nombre.
 void CDiccionario::bajaAtributo(){
     long dir;
     char nombre[30];
@@ -545,7 +538,7 @@ void CDiccionario::bajaAtributo(){
     }
 }
 
-// Descripción: Salta el nodo especificado en la lista de atributos para desvincularlo sin corromper el archivo.
+//   Salta el nodo especificado en la lista de atributos para desvincularlo sin corromper el archivo.
 long CDiccionario::eliminaAtributo(char cad[30]){
     long cab = activa.atr;
     long dirant = -1;
@@ -573,7 +566,7 @@ long CDiccionario::eliminaAtributo(char cad[30]){
     return cab;
 }
 
-// Descripción: Renueva los parámetros de configuración de un atributo reemplazándolo con una captura nueva.
+//   Renueva los parámetros de configuración de un atributo reemplazándolo con una captura nueva.
 void CDiccionario::modificaAtributo(){
    Atributo nvo, aux;
    long dir, dir2;
@@ -582,7 +575,7 @@ void CDiccionario::modificaAtributo(){
    scanf("%s", aux.nombre);
 
    if(buscaAtributo(aux.nombre) != -1) {
-       printf("\n--- Captura de Nueva Informacion ---\n");
+       printf("\nCaptura de Nueva Informacion\n");
        nvo = capturaAtributo();
        dir2 = buscaAtributo(nvo.nombre);
 
@@ -599,10 +592,10 @@ void CDiccionario::modificaAtributo(){
    }
 }
 
-// Descripción: Precarga el esquema, valida PK única, hace offset de puntero y suma dinámicamente los tamaños.
+//Precarga el esquema, valida PK única, hace offset de puntero y suma dinámicamente los tamaños.
 bool CDiccionario::cargaAtributos() {
     if(activa.atr == -1){
-        printf("\nError: La entidad '%s' no tiene atributos. Debe crear columnas primero.\n", activa.nombre);
+        printf("\nError: La entidad '%s' no tiene atributos. Debes crear columnas primero.\n", activa.nombre);
         return false;
     }
 
@@ -613,7 +606,7 @@ bool CDiccionario::cargaAtributos() {
 
     tambloque = sizeof(long);
 
-    while(cab != -1){
+    while(cab !=-1 && cont<50){
         actual = leeAtributo(cab);
         arrAtributo[cont] = actual;
         tambloque += actual.tamano;
@@ -621,20 +614,16 @@ bool CDiccionario::cargaAtributos() {
         if(actual.lskp == 's' || actual.lskp == 'S'){
             contPK++;
         }
-
         cont++;
         cab = actual.sig;
     }
-
     nAtributos = cont;
-
-    // Validación estricta: No se admiten tablas sin PK o con multiples PK.
+    //No se admiten tablas sin PK o con multiples PK.
     if(contPK != 1){
         printf("\nError: Carga cancelada. Se detectaron %d Claves Primarias y debe haber exactamente 1.\n", contPK);
         return false;
     }
-
-    // Acomodo forzado de la PK hacia el indice 0 del arreglo para el comparador.
+    //Acomodo forzado de la PK hacia el indice 0 del arreglo para el comparador.
     for(int i = 0; i < nAtributos; i++){
         if(arrAtributo[i].lskp == 's' || arrAtributo[i].lskp == 'S'){
             if(i != 0){
@@ -645,25 +634,24 @@ bool CDiccionario::cargaAtributos() {
             break;
         }
     }
-
     return true;
 }
 
-//---------------------- Funciones de Bloques ----------------------
+//Funciones de bloques
 
-// Descripción: Analiza e infiere de qué tipo es la Clave Primaria para resolver si un bloque es mayor o menor a otro.
+//Analiza e infiere de qué tipo es la Clave Primaria para resolver si un bloque es mayor o menor a otro.
 float CDiccionario::comparaBloques(void *b1, void *b2){
-    long desp = sizeof(long);
-    switch (arrAtributo[0].tipo){
-        case 1: // char
+    long desp=sizeof(long);
+    switch(arrAtributo[0].tipo){
+        case 1: //char
             return strcmp((char*)b1 + desp, (char*)b2 + desp);
-        case 2: // int
+        case 2: //int
             return *(int*)((char*)b1 + desp) - *(int*)((char*)b2 + desp);
-        case 3: // float
+        case 3: //float
             return *(float*)((char*)b1 + desp) - *(float*)((char*)b2 + desp);
-        case 4: // double
+        case 4: //double
             return *(double*)((char*)b1 + desp) - *(double*)((char*)b2 + desp);
-        case 5: // long
+        case 5: //long
             return *(long*)((char*)b1 + desp) - *(long*)((char*)b2 + desp);
         default:
             printf("\nError: Tipo de dato PK desconocido.\n");
@@ -671,7 +659,7 @@ float CDiccionario::comparaBloques(void *b1, void *b2){
     }
 }
 
-// Descripción: Navega en el sistema de disco contrastando la PK buscada contra los registros guardados.
+//Navega en el sistema de disco contrastando la PK buscada contra los registros guardados.
 long CDiccionario::buscaBloque(void *buscado) {
     long cab = activa.data;
     void *actual = NULL;
@@ -689,30 +677,33 @@ long CDiccionario::buscaBloque(void *buscado) {
     return -1;
 }
 
-// Descripción: Crea el malloc e itera sobre los atributos pidiendo al usuario el valor exacto para su tipo.
+//Crea el malloc e itera sobre los atributos pidiendo al usuario el valor exacto para su tipo.
 void* CDiccionario::CapturaBloque() {
     void *bloque = malloc(tambloque);
     long desp = sizeof(long);
     *(long*)bloque = -1;
 
-    printf("\n--- Captura de Datos ---\n");
-    for(int i = 0; i < nAtributos; i++) {
+    printf("\nCaptura de Datos:\n");
+    for(int i = 0; i <nAtributos; i++) {
         printf("Ingrese %s (%s): ", arrAtributo[i].nombre, arrAtributo[i].descripcion);
-
         switch(arrAtributo[i].tipo) {
-            case 1: // char
-                scanf(" %[^\n]", (char*)((char*)bloque + desp));
+            case 1: //char
+                char tempBuffer[256]; 
+                scanf(" %[^\n]", tempBuffer);
+                strncpy((char*)((char*)bloque + desp), tempBuffer, arrAtributo[i].tamano - 1);
+                //aquí se asegura el fin de cadena para evitar desbordes en las consultas
+                ((char*)bloque + desp)[arrAtributo[i].tamano - 1]= '\0';
                 break;
-            case 2: // int
+            case 2: //int
                 scanf("%d", (int*)((char*)bloque + desp));
                 break;
-            case 3: // float
+            case 3: //float
                 scanf("%f", (float*)((char*)bloque + desp));
                 break;
-            case 4: // double
+            case 4: //double
                 scanf("%lf", (double*)((char*)bloque + desp));
                 break;
-            case 5: // long
+            case 5: //long
                 scanf("%ld", (long*)((char*)bloque + desp));
                 break;
         }
@@ -721,12 +712,10 @@ void* CDiccionario::CapturaBloque() {
     return bloque;
 }
 
-// Descripción: Orquesta la recolección, revisión de unicidad, inserción y notificaciones de alta de datos.
+//Recolección, revisión de unicidad, inserción y notificaciones de alta de datos.
 void CDiccionario::altaBloque() {
     if(!cargaAtributos()) return;
-
     void *nuevo = CapturaBloque();
-
     if (buscaBloque(nuevo) == -1) {
         long dir = EscribeBloque(nuevo);
         InsertaBloque(nuevo, dir);
@@ -737,7 +726,7 @@ void CDiccionario::altaBloque() {
     }
 }
 
-// Descripción: Transfiere un bloque de datos brutos del disco hacia la memoria principal RAM.
+// Transfiere un bloque de datos brutos del disco hacia la memoria principal RAM.
 void *CDiccionario :: LeeBloque(long dir) {
     void *bloque = malloc(tambloque);
     fseek(archivo, dir, SEEK_SET);
@@ -745,7 +734,7 @@ void *CDiccionario :: LeeBloque(long dir) {
     return bloque;
 }
 
-// Descripción: Coloca la información consolidada en un malloc hacia el final del archivo físico.
+//Coloca la información consolidada en un malloc hacia el final del archivo físico.
 long CDiccionario :: EscribeBloque(void *bloque) {
     long dir;
     fseek(archivo, 0, SEEK_END);
@@ -754,13 +743,13 @@ long CDiccionario :: EscribeBloque(void *bloque) {
     return dir;
 }
 
-// Descripción: Impacta un bloque desde RAM directo al espacio físico indicado en disco para modificaciones.
+//   Impacta un bloque desde RAM directo al espacio físico indicado en disco para modificaciones.
 void CDiccionario :: ReescribeBloque(long dir, void *bloque) {
     fseek(archivo, dir, SEEK_SET);
     fwrite(bloque, tambloque, 1, archivo);
 }
 
-// Descripción: Conecta la memoria dinámica del bloque nuevo dentro de la cadena lógica usando la PK como medida de ordenación.
+//Conecta la memoria dinámica del bloque nuevo dentro de la cadena lógica usando la PK como medida de ordenación.
 void CDiccionario :: InsertaBloque(void *nuevo, long dirnvo) {
     if (activa.data == -1) {
         activa.data = dirnvo;
@@ -769,7 +758,7 @@ void CDiccionario :: InsertaBloque(void *nuevo, long dirnvo) {
         void *actual = LeeBloque(activa.data);
 
         if (comparaBloques(actual, nuevo) > 0) {
-            // --- INSERCION AL INICIO ---
+            //INSERCION AL INICIO
             *(long*)nuevo = activa.data;
             ReescribeBloque(dirnvo, nuevo);
             activa.data = dirnvo;
@@ -790,7 +779,7 @@ void CDiccionario :: InsertaBloque(void *nuevo, long dirnvo) {
                 }
             }
 
-            // --- INSERCION EN MEDIO O AL FINAL ---
+            //INSERCION EN MEDIO O AL FINAL ---
             if (cab != -1) {
                 *(long*)nuevo = cab;
                 ReescribeBloque(dirnvo, nuevo);
@@ -807,52 +796,46 @@ void CDiccionario :: InsertaBloque(void *nuevo, long dirnvo) {
     }
 }
 
-// Descripción: Consulta los bloques
-void CDiccionario :: ConsultaBloque() {
-    printf("\n\t=== REGISTROS DE %s ===\n", activa.nombre);
-
+void CDiccionario :: ConsultaBloque(){
+    printf("\n\tREGISTROS DE %s \n", activa.nombre);
     void *bloque;
     long cab = activa.data;
     int numeroFila = 1;
 
-    if (cab == -1) {
+    if (cab == -1){
         printf("\nNo hay registros guardados en esta entidad todavia.\n");
         return;
     }
 
     while (cab != -1) {
         bloque = LeeBloque(cab);
-
-        // Encabezado de la Ficha
-        printf("\n----------------------------------------\n");
+        printf("\n\n");
         printf(" REGISTRO #%d \n", numeroFila);
         printf(" Dir. Logica: %ld | Siguiente: %ld\n", cab, *(long*)bloque);
-        printf("----------------------------------------\n");
+        printf("\n");
 
         long desp = sizeof(long);
         for (int i = 0; i < nAtributos; i++) {
             printf(" %s: ", arrAtributo[i].nombre);
-
             switch (arrAtributo[i].tipo) {
-                case 1: // char
+                case 1: //char
                     printf("%s\n", (char *)((char*)bloque + desp));
                     break;
-                case 2: // int
+                case 2: //int
                     printf("%d\n", *(int *)((char*)bloque + desp));
                     break;
-                case 3: // float
+                case 3: //float
                     printf("%.2f\n", *(float *)((char*)bloque + desp));
                     break;
-                case 4: // double
+                case 4: //double
                     printf("%.2lf\n", *(double *)((char*)bloque + desp));
                     break;
-                case 5: // long
+                case 5: //long
                     printf("%ld\n", *(long *)((char*)bloque + desp));
                     break;
             }
             desp += arrAtributo[i].tamano;
         }
-
         cab = *(long*)bloque;
         free(bloque);
         numeroFila++;
