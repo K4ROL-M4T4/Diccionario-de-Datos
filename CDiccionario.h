@@ -1,30 +1,27 @@
-#ifndef CDICCIONARIO_H
-#define CDICCIONARIO_H
-#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-using namespace std;
-
 #define TAM 50
 typedef char cadena [30];
 
-typedef struct{
+typedef struct
+{
     long atr;
     long sig;
     cadena nombre;
     long data;
 }Entidad;
 
-typedef struct Atributo {
-    char nombre[30];
-    unsigned int tipo;
-    unsigned int tamano;
-    char iskp;
-    long sig;
-    char descripcion[30];
+typedef struct
+{
+    cadena nombre;
+    int tipo;
+    int tamano;
+    char lskp;
     char nulo;
+    char descripcion[50];
+    long sig;
 }Atributo;
 
 class CDiccionario
@@ -35,12 +32,13 @@ private:
     long diractiva;
     long tambloque;
     int nAtributos;
-    char nombreArchivo[50];
+    Atributo arrAtributo[50];
 
 public:
     CDiccionario();
 
     void menuPrincipal();
+
     void nuevoDiccionario();
     void abrirDiccionario();
     void MenuEntidades();
@@ -49,11 +47,11 @@ public:
     void consultarEntidades();
     void bajaEntidad();
     void modificaEntidad();
+
     long getCabEntidades();
     void escribeCabEntidades(long cab);
     Entidad capturaEntidad();
     long buscaEntidad(Entidad ent);
-    long buscaEntidad(cadena nom);
     Entidad leeEntidad(long dir);
     long escribeEntidad(Entidad ent);
     void reescribeEntidad(long dir, Entidad ent);
@@ -61,25 +59,31 @@ public:
     long eliminaEntidad(cadena nom);
 
     void menuAtributos();
-    long pideEntidad();
-    void altaAtributo();
+
+    // Funciones publicas de atributos
+    bool pideEntidad();
+    Atributo capturaAtributo();
+    long buscaAtributo(char *atr);
+    void insertaAtributo(Atributo nvo, long dir);
     void nuevoAtributo();
     void consultarAtributo();
-    void eliminaAtributo();
-    long eliminaAtributo(cadena nom);
+    long eliminaAtributo(char cab[30]);
     void modificaAtributo();
-    Atributo capturaAtributo();
-    long buscaAtributo(cadena nom);
     Atributo leeAtributo(long dir);
     long escribeAtributo(Atributo atr);
     void reescribeAtributo(long dir, Atributo atr);
-    void insertaAtributo(Atributo nvo, long dir);
     void bajaAtributo();
+    bool cargaAtributos();
 
-    void menuDatos();
-    void nuevoRegistro();
-    void consultarRegistro();
-    void eliminaRegistro();
-    void modificaRegistro();
+    //Funciones Bloques
+    void menuBloques();
+    void* CapturaBloque();
+    float comparaBloques(void *b1, void *b2);
+    long buscaBloque(void *buscado);
+    void altaBloque();
+    void* LeeBloque(long dir);
+    long EscribeBloque(void *bloque);
+    void ReescribeBloque(long dir, void *bloque);
+    void InsertaBloque(void *nuevo, long dirnvo);
+    void ConsultaBloque();
 };
-#endif
